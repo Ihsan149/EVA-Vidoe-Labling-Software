@@ -1,0 +1,77 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: eva-service
+spec:
+  selector:
+    pod: eva
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: eva
+  labels:
+    deployment: eva
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: eva
+  template:
+    metadata:
+      labels:
+        pod: eva
+    spec:
+      containers:
+        - name: eva
+          image: sekidocker.rnd.ki.sw.ericsson.se/proj-eva/eva
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: user
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+
+            - name: POSTGRES_HOST
+              value: postgres-service
+
+            - name: REDIS_HOST
+              value: redis-service
+          volumeMounts:
+            - name: media-volume-mount
+              mountPath: /app/media
+      volumes:
+        - name: media-volume-mount
+          persistentVolumeClaim:
+            claimName: media
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: eva-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: 500m
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx-service
+          servicePort: 80
+---

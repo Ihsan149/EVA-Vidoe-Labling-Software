@@ -1,0 +1,52 @@
+version: '3'
+services:
+  eva:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_USER=pguser
+      - POSTGRES_PASSWORD=pguser
+      - POSTGRES_HOST=postgres
+      - REDIS_HOST=redis
+      - PYTHONUNBUFFERED=1
+    links:
+      - redis
+      - postgres
+      - celery
+    volumes:
+      - static:/app/static
+      - media:/app/media
+      
+  celery:
+    build: .
+    command: celery -A eva worker -l info
+    environment:
+      - POSTGRES_USER=pguser
+      - POSTGRES_PASSWORD=pguser
+      - POSTGRES_HOST=postgres
+      - REDIS_HOST=redis
+      - PYTHONUNBUFFERED=1
+    links:
+      - redis
+      - postgres
+    volumes:
+      - media:/app/media      
+      
+  redis:
+    image: redis
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_DB=eva_db
+      - POSTGRES_USER=pguser
+      - POSTGRES_PASSWORD=pguser
+    volumes:
+      - database:/var/lib/postgresql/data
+      
+volumes:
+  static:
+  media:
+  database:

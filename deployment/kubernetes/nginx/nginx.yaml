@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - port: 80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    upstream eva-service {
+      server eva-service:8000;
+    }
+    
+    server {
+      listen 80;
+      server_name "";
+      
+      client_max_body_size 10M;
+      
+      location /static {
+        alias /srv/static;
+      }
+      
+      location / {
+        proxy_pass http://eva-service;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+    }
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.15
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+          name: nginx-config
+        - mountPath: /srv/static
+          name: static-volume-mount
+        - mountPath: /srv/media
+          name: media-volume-mount          
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-config
+      - name: static-volume-mount
+        persistentVolumeClaim:
+          claimName: static
+      - name: media-volume-mount
+        persistentVolumeClaim:
+          claimName: media

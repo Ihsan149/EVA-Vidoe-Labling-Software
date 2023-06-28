@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: celery-worker
+  labels:
+    deployment: celery-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: celery-worker
+  template:
+    metadata:
+      labels:
+        pod: celery-worker
+    spec:
+      containers:
+        - name: celery-worker
+          image: sekidocker.rnd.ki.sw.ericsson.se/proj-eva/eva
+          command: ['celery', '-A', 'eva', 'worker', '-l', 'debug']
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: user
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+
+            - name: POSTGRES_HOST
+              value: postgres-service
+
+            - name: REDIS_HOST
+              value: redis-service
+          volumeMounts:
+            - name: media-volume-mount
+              mountPath: /app/media
+      imagePullPolicy: Always
+      volumes:
+        - name: media-volume-mount
+          persistentVolumeClaim:
+            claimName: media

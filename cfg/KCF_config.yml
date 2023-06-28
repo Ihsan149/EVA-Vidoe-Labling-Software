@@ -1,0 +1,39 @@
+# OVERALL SETTINGS
+lambdar: 0.0001
+padding: 2 # Adds extra padding on the box to allow better detection of object, a value of 2 gives a 2 times larger box
+              # that it tries to track
+output_sigma_factor: 0.125
+hog: True # Decides whether you use hog-features or not
+multiscale: True # If you want to use scaling
+fixed_window: False # If multiscale is False and fixed_window is True then it will be using fixed window
+detect_threshold: 0.4 # The threshold in which if below it is below
+                      # (relative to the original probability from the initial bounding box and image) it will lose track of object
+detect_threshold_interp: 0 # How much the moving average weight should be between changing the detect_threshold of comparing with the latest images and boxes vs the past,
+                              # set to zero if you only want to compare with the initial image.
+
+
+# IF YOU USE HOG-FEATURES
+sigma_hog: 0.6 # the sigma-factor in the gaussian correlation kernel
+interp_factor_hog: 0.0125 # How much it interpolates between images for what box-image it searches for
+cell_size_hog: 4 # the width and height of the cell in terms of pixels, lower numbers gives higher accuracy but higher computation time
+
+# IF YOU DON'T USE HOG-FEATURES
+sigma_grey_scale: 0.2 # the sigma-factor in the gaussian correlation kernel
+interp_factor_grey_scale: 0.075 # How much it interpolates between images for what box-image it searches for
+cell_size_grey_scale: 1 # the width and height of the cell in terms of pixels,
+                        # lower numbers gives higher accuracy but higher computation time
+
+# IF YOU USE MULTISCALE - SCALING THE SIZE OF THE BOX
+template_size_multiscale: 96
+scale_step_multiscale: 1.05 # The scale factor for which it increases/decreases the size of the bounding box and compares with the normal sized bounding box
+scale_weight_multiscale: 0.96 # How much it weights the probability that a scaled bounding box gave in detection,
+                              # lower values makes the bounding box change size less frequently
+
+# IF YOU DECIDE TO USE A FIXED WINDOW BOX
+template_size_fixed_window: 96
+scale_step_fixed_window: 1
+
+# IF YOU DECIDE TO NOT USE FIXED WINDOW OR MULTISCALE
+template_size_else: 1
+scale_step_else: 1
+

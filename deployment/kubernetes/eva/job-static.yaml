@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: eva-static
+spec:
+  template:
+    spec:
+      containers:
+        - name: eva
+          image: sekidocker.rnd.ki.sw.ericsson.se/proj-eva/eva
+          command: ['python', 'manage.py', 'collectstatic', '--noinput']
+          volumeMounts:
+            - name: static-volume-mount
+              mountPath: /app/static
+      restartPolicy: Never
+      volumes:
+        - name: static-volume-mount
+          persistentVolumeClaim:
+            claimName: static
+  backoffLimit: 5
