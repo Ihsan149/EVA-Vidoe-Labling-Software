@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<script src="{% static "table_project.js" %}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#" style="padding: 5px 5px;">
+        <img src="/static/img/icon.png">
+      </a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="/">HOME</a></li>
+      <li class="active"><a href="/projects">Projects  <span class="sr-only">(current)</span></a></li>
+      <li><a href="/labels">Labels</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-1">
+      <h1>Projects</h1>
+      <div id="toolbar_project">
+        <button id="add_project" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Project
+        </button>
+        <button id="remove_project" class="btn btn-danger" disabled>
+            <i class="fas fa-times"></i> Delete
+        </button>
+        <span id="project_error" class="error text-danger"></span>
+      </div>
+
+      <table id="project-table" class="table"
+          data-toolbar="#toolbar_project"
+          data-id-field="id"
+          data-pagination="true">
+      </table>
+          
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="selectLabelsModal" tabindex="-1" role="dialog" aria-labelledby="selectLabelsModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="selectLabelsLabel">Select Labels</h3>
+      </div>
+      <div class="modal-body">
+        <div id="toolbarLabel-Select">
+          <button id="addLabelSelect" class="btn btn-primary">
+              <i class="fas fa-plus"></i> Add
+          </button>
+          <button id="removeLabelSelect" class="btn btn-danger" disabled>
+              <i class="fas fa-times"></i> Delete
+          </button>
+          <span id="errorLabelSelect" class="error text-danger"></span>
+        </div>
+        
+        <table id="labelSelect-table" class="table"
+            data-id-field="id"
+            data-pagination="true"
+            data-toolbar='#toolbarLabelSelect'
+            data-ajax="loadLabelSelectTable">
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Close Select Labels window">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

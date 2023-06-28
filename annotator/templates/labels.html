@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<script src="{% static "table_label.js" %}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#" style="padding: 5px 5px;">
+        <img src="/static/img/icon.png">
+      </a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="/">HOME</a></li>
+      <li><a href="/projects">Projects</a></li>
+      <li class="active"><a href="/labels">Labels <span class="sr-only">(current)</span></a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-1">
+      <h1>Labels</h1>
+      <div id="toolbar">
+        <button id="add_label" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Label
+        </button>
+        <button id="remove_label" class="btn btn-danger" disabled>
+            <i class="fas fa-times"></i> Delete
+        </button>
+        <span id="label_error" class="error text-danger"></span>
+      </div>
+
+      <table id="label-table" class="table"
+          data-toolbar="#toolbar"
+          data-id-field="id"
+          data-pagination="true">
+      </table>
+      
+    </div>
+  </div>
+</div>
+
+{% endblock %}

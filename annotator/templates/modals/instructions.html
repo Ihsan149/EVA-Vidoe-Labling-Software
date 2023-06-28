@@ -1,0 +1,44 @@
+<div class="modal fade" id="instructionModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+         <h4 class="modal-title submit-result">Help</h4>
+      </div>
+      <div class="modal-body">
+        <h2>Instructions</h2>
+          <ul>
+            <li>Class label can be selected from the drop down menu.</li>
+            <li>Draw a bounding box around object(s) of interest.</li>
+            <li>You can manually adjust existing bounding boxes.</li>
+            <li>To visualize press space or <i class="fas fa-play"></i> or use <b>S</b> and <b>A</b>.</li>
+          </ul></br>
+         <ul>
+           <li>Press <b>T</b> or  <a class="btn btn-info btn-sm disabled" aria-disabled="true"  type="button">Track</a> to start the tracker.</li>
+           <li>The tracker runs only forward in time not affecting past annotations.</li>
+           <li>Press <b>L</b> or <a class="btn btn-info btn-sm disabled" aria-disabled="true"  type="button">Lock</a> to lock/unlock objects, locked objects are ignored by the tracker.</li>
+         </ul></br>
+         <ul>
+           <li>Press <b>D</b> or <i class="fas fa-trash-alt"></i>  to delete a bounding box in the current frame.</li>
+           <li>Press <b>Delete</b> or <i class="fas fa-trash-alt gi-2x"></i>  to delete bounding boxes from the current frame and onwards.</li>
+         </ul></br>
+         <ul>
+            <li>Sequences are annotated in chunks of 100 frames, use previous and next to move between chunks.</li>
+            <li>Press <i class="fas fa-fast-backward"></i> or <i class="fas fa-fast-forward"></i> to move to the start or end of the current chunk.</li>
+            <li>Once you are done with annotation, you can export the labels (and images) from the home page <i class="fas fa-home"></i>.</li>
+            <li>Annotations are automatically saved when you move between chunks. You can manually save using <a class="btn btn-info btn-sm disabled" aria-disabled="true"  type="button">Save</a>.</li>
+          </ul>
+
+        <h2>Keyboard shortcuts</h2>
+          <img class="img-responsive" id="keyboardshortcut" src="/static/img/instructions.png" alt="keyboard shortcuts">
+         <h2>Context menu</h2>
+        <ul>
+          <li>Right click on a bounding box to access the context menu.</li>
+          <img class="img-responsive" src="/static/img/contextMenu.png" alt="context menu">
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button id="submit-survey-btn" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

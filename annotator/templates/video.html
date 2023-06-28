@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="/static/videostyle.css"/>
+<link rel="stylesheet" type="text/css" href="/static/vendor/contextmenu/jquery.contextMenu.css" />
+  <script>
+    video = {{ video_data|safe }};
+    imgDimensions = {{image_list_dimensions}}
+    imageList = {{image_list|safe}};
+    helpEmbedded = {{ help_embed|yesno:'true,false,false' }};
+    offset = {{offset}}
+    videoChunkSize = {{video_chunk_size}}
+    videoIndex = {{video_index}}
+  </script>
+  <script src="/static/vendor/raphael/raphael.min.js"></script>
+  <script src="/static/vendor/imgplay/jquery.imgplay.js"></script>
+  <script type="text/javascript" src="/static/views/framePlayers.js"></script>
+  <script type="text/javascript" src="/static/app.js"></script>
+  <script type="text/javascript" src="/static/bounds.js"></script>
+  <script type="text/javascript" src="/static/datasources.js"></script>
+  <script type="text/javascript" src="/static/misc.js"></script>
+  <script type="text/javascript" src="/static/player.js"></script>
+  <script type="text/javascript" src="/static/annotation.js"></script>
+  <script type="text/javascript" src="/static/views/keyframebar.js"></script>
+  <script type="text/javascript" src="/static/views/player.js"></script>
+  <script type="text/javascript" src="/static/views/rect.js"></script>
+  <script src="/static/vendor/contextmenu/jquery.contextMenu.js"></script>
+  <script src="/static/vendor/contextmenu/jquery.ui.position.js"></script>
+
+  <script type="text/javascript">
+    // set up a new XMLHttpRequest variable
+    //TODO: move javascript to own file
+    var request = false;
+    try {
+        request = new XMLHttpRequest();
+    } catch (trymicrosoft) {
+        try {
+            request = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (othermicrosoft) {
+            try {
+                request = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (failed) {
+                request = false;
+            }
+        }
+    }
+     
+    if (!request)
+        alert("Error initializing XMLHttpRequest!");
+
+    $(document).ready(function () {
+      $("#labels").prop("selectedIndex", 0).change();
+    });
+
+	$(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+{% endblock %}
+
+{% block body %}
+
+<div class=" {{ 'panel panel-default panel-space'}} player-container" id="player">
+  <div class="row" >
+    <div class="panel-body col-md-9">
+      <div class="player-screen">
+        {% if image_list %}
+          <div class="player-video">
+            {% for image in image_list %}
+              {% if forloop.counter0 < 5 %}
+                <img src="{{image}}" id="image-list" name="image-list"/>
+              {% else %}
+                <img data-src="{{image}}" />
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% else %}
+        <!--here is the video included (mark)-->
+          <div class="player-video-container">
+            <video class="player-video"></video>
+          </div>
+        {% endif %}
+        <div class="player-paper"></div>
+        <div class="player-loader">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+      </div>
+
+      <div class="panel panel-primary bottom-controls">
+
+        <div class="panel-heading">
+          <input class="player-control-scrubber" type="range" min="0" max="10000" value="0" step="1"/>
+
+          <div class="panel panel-success player-keyframebar-container">
+
+            <!-- <div class="panel-heading style="background-color: #3A7734"> -->
+            <div class="player-keyframebar"></div>
+            <!-- </div> -->
+          </div>
+          <div> Video Name : {{video_info.name}} <br/> Project : {{video_info.project}} </div>
+          <div class ="line-button-group-center-item-group-tracker" >
+              <div id="display-status">&nbsp;</div>
+          </div>
+          <div class="line-button-group" >
+            <div class="frame-number-item">
+              <input class="form-control player-control-time" id="frame-number" placeholder="{{offset}}">
+            </div>
+            <div class="pagination-item">
+              <nav>
+                <ul class="pagination chunk-control-group">
+                  {% if not first_video_index %}
+                    <li class="page-item"><a id="previous-btn" class="page-link" href="#">Previous</a></li>
+                  {% else %}
+                    <li class="page-item"><a id="previous-btn-disabled" class="page-link disabled">Previous</a></li>
+                  {% endif %}
+                  <li class="page-item"><a class="page-link" href="#">{{offset}}-{{offset|add:video_chunk_size|add:-1}}</a></li>
+                  {% if not last_video_index %}
+                    <li class="page-item"><a id="next-btn" class="page-link " href="#" >Next</a></li>
+                  {% else %}
+                    <li class="page-item"><a id="next-btn-disabled" class="page-link disabled"  >Next</a></li>
+                  {% endif %}
+                </ul>
+              </nav>
+            </div>
+            <h5>&nbsp;Images Left: {{video_info.images_left}} </h5>
+            <div class ="line-button-group-center-item-group">
+              <!-- <div class = "line-button-group-item">
+                <div id="submit-btn-group" class="btn-group" role="group">
+                <button id = "hide-btn" type="button" class="btn btn-info" >hide</button>
+                </div>
+              </div>        -->
+            <div >
+               <button id="lock-unlock-btn" class="player-control-lock-unlock-object btn btn-info" type="button"
+                       data-toggle="tooltip" data-placement="bottom" title="Lock|Unlock object for tracking (shortcut - ' L ')">Lock</button>
+               <button id="tracker-btn" class="player-control-start-tracker btn btn-info" type="button"
+                       data-toggle="tooltip" data-placement="bottom" title="Start tracker (shortcut - ' T ')">Track</button>
+            </div>
+            <div class = "line-button-group-item">
+              <div class="label-button">
+                <select class="select-button" id="labels" name="labels">
+                  {% for label in label_data %}
+                <option value="{{label.name}}" id="object-radio-{{label.name}}">
+                  {{label.name}}
+                </option>
+                  {% endfor %}
+                </select>
+              </div>  
+            </div>
+            <div class = "line-button-group-item">
+              <span class="noselect" >
+                <div class="fas fa-fast-backward player-control-goto-start" data-toggle="tooltip"
+                     data-placement="bottom" title="Go to start"></div>
+                <div class="fas fa-step-backward player-control-step-backward" data-toggle="tooltip"
+                     data-placement="bottom" title="One Frame Backward (shortcut - 'A')"></div>
+                <div class="fas fa-play player-control-play-pause" data-toggle="tooltip"
+                     data-placement="bottom" title="Play / Pause (shortcut - 'space'')"></div>
+                <div class="fas fa-step-forward player-control-step-forward" data-toggle="tooltip"
+                     data-placement="bottom" title="One Frame Forward (shortcut - 'S')"></div>
+                <div class="fas fa-fast-forward player-control-goto-end" data-toggle="tooltip"
+                     data-placement="bottom" title="Go to end"></div>
+                <div class="fas fa-trash-alt player-control-delete-keyframe" data-toggle="tooltip"
+                     data-placement="right" title="Delete selected annotation from the current frame (shortcut - 'D')"></div>
+                <div class="fas fa-trash-alt gi-2x player-control-delete-all-future-keyframes" data-toggle="tooltip"
+                     data-placement="right" title="Delete selected annotation from the current and all future frames (shortcut - 'Delete')"></div>
+              </span>
+            </div>
+            <div id="submit-container" class = "line-button-group-item">
+              <div id="submit-btn-group"  role="group">
+                <button id="show-help" type="button" class="btn btn-info" >Help</button>
+                <button id="submit-btn" type="button" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Save annotations">Save</button>
+
+              </div>
+
+            </div>
+             <div >
+                  <a href="/" ><span class="fas fa-home" style=" color: black;font-size: 20px"></span></a>
+                </div>
+
+          </div>
+
+          <!--<div class="pull-right">-->
+            <!--<input id="scale-checkbox" type="checkbox" />-->
+            <!--<label for="scale-checkbox">Stretch to fit</label>-->
+          <!--</div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% include "modals/generic_modal.html" %}
+{% include "modals/instructions.html" %}
+</div>
+<script>
+$("#home-icon").remove()
+</script>
+{% endblock %}
+</div>

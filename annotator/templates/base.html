@@ -1,0 +1,72 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ER DRI Media Content Analytics</title>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static "vendor/jquery/jquery.fileupload.css" %}">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/static/vendor/notifications/animate/animate.css">
+    <link rel="stylesheet" href="/static/basestyle.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/solid.css"
+      integrity="sha384-QokYePQSOwpBDuhlHOsX0ymF6R/vLk/UQVz3WHa6wygxI5oGTmDTv8wahFOSspdm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/fontawesome.css"
+      integrity="sha384-vd1e11sR28tEK9YANUtpIOdjGW14pS87bUBuOIoBILVWLFnS+MCX9T6MMf0VdPGq" crossorigin="anonymous">
+
+
+    <script>
+      function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) return parts.pop().split(";").shift();
+      }
+      CSRFToken = getCookie('csrftoken');
+      if (CSRFToken === undefined) {
+        CSRFToken = '{{ csrf_token }}';
+      } else {
+        CSRFTokenAlt = '{{ csrf_token }}';
+      }
+    </script>
+    
+    <!-- jQuery library -->
+    <script src="/static/vendor/jquery/jquery.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.js"></script>
+    <script src="{% static "vendor/bootstrap-table/bootstrap-table-editable.js" %}"></script>
+    <script type="text/javascript" src="/static/vendor/notifications/notify/bootstrap-notify.min.js"></script>
+    <script src="/static/vendor/lodash/lodash.js"></script>
+    <script type='text/javascript' src="/static/vendor/randomColor/randomColor.js"></script>
+
+    {% block head %}{% endblock %}
+
+</head>
+<body>
+<script>
+    $(document).ready(function(){
+       $.notifyDefaults({
+            placement:{
+                        from: "top",
+                        align: "right"
+                     },
+           allow_dismiss: true,
+                    animate: {
+                        enter: 'animated lightSpeedIn',
+                        exit: 'animated lightSpeedOut'
+                    },
+           template: '<div data-notify="container" class="col-xs-11 col-sm-2 alert alert-{0}" role="alert">' +
+                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                        '<span data-notify="icon"></span> ' +
+                        '<span data-notify="title">{1}</span>' +
+                        '<span data-notify="message">{2}</span>' +
+                      '</div>'
+           });
+      });
+</script>
+{% block body %}{% endblock %}
+</body>
+</html>

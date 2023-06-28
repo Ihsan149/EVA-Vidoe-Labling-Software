@@ -1,0 +1,294 @@
+.panel-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+}
+.select-button {
+    padding: 7px 10px;
+    margin: 3px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.top-controls {
+    padding: 15px 15px 15px 20px;
+}
+
+.bottom-controls {
+    margin-bottom: 0;
+    border: 0;
+    border-radius: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.btn-btn-default{
+    color: black;
+    margin-left: 20px;
+    border-radius: 4px;
+    padding: 7px 10px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+
+}
+
+/* Player */
+
+.player-container {
+    margin: 0;
+    border-width: 0px;
+    text-align: left;
+}
+
+.player-screen {
+    margin: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    flex-basis: 200px;
+    overflow-y: scroll;
+}
+
+.player-video-container {
+    display: flex;
+}
+
+.player-video {
+    position: absolute;
+    top: 0;
+}
+
+.player-video canvas {
+    background-color: #fff;
+}
+
+.player-video img {
+    display: none;
+}
+
+div.imgplay {
+    padding-bottom: 0;
+    background: #fff;
+}
+
+.player-paper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.player-loader {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #000;
+    opacity: 0.7;
+    display: none;
+    align-items: center;
+}
+
+.player-loader > div {
+  width: 32px;
+  height: 32px;
+  background-color: #fff;
+
+  border-radius: 100%;
+  display: inline-block;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.player-loader .bounce1 {
+  animation-delay: -0.32s;
+}
+
+.player-loader .bounce2 {
+  animation-delay: -0.16s;
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    transform: scale(0);
+  } 40% {
+    transform: scale(1.0);
+  }
+}
+
+.player-keyframebar {
+    position: relative;
+    margin-left: 6px;
+    margin-right: 6px;
+    height: 2.5em;
+}
+.player-keyframebar-keyframe {
+    position: absolute;
+    color: orange;
+    width: auto;
+    height: 1.4em;
+    top: 0;
+    margin-left: -.7em;
+}
+.player-keyframebar-keyframe-noselected {
+    top: 1.1em;
+    opacity: 0.3;
+}
+.player-keyframebar-keyframe-noselected:hover {
+    opacity: 0.7;
+}
+.player-keyframebar-keyframe circle {
+    stroke: #902B00;
+    stroke-width: 7px;
+    fill: #FF8000;
+}
+.player-keyframebar-keyframe:hover:not(:active) circle {
+    fill: #C25305;
+}
+
+.player-rect-normal {
+    stroke: white;
+    stroke-width: 1px;
+}
+.player-rect-selected {
+    stroke-opacity: 1;
+    fill-opacity: 0.2;
+}
+.player-rect-noselected {
+    stroke-opacity: 0.5;
+    fill-opacity: 0.5;
+}
+.player-rect-real {
+    stroke-dasharray: none;
+}
+.player-rect-noreal {
+    stroke-dasharray: 8, 4;
+}
+.player-rect-noselected.player-rect-noreal.player-rect-nosinglekeyframe {
+    display: none;
+}
+
+.player-rect-active {
+    fill: black;
+    fill-opacity: 0.3;
+    opacity: 0.5;
+    stroke: white;
+    stroke-opacity: 1;
+    stroke-width: 1px;
+}
+.player-rect-noactive {
+    fill: transparent;
+    stroke: transparent;
+    stroke-width: 0;
+    opacity: 0;
+}
+
+
+.define-video-name{
+    text-align: center;
+
+
+}
+
+/* Uncategorized rules below */
+
+#left-container {
+    padding-left: 0px;
+    margin-left: 0px;
+    width: 841px;
+    display: inline-block;
+
+    margin-top: 0;
+}
+
+#frame-number {
+    display: inline-block;
+    width: 60px;
+}
+
+#submit-container {
+    display: inline-block;
+    position: absolute;
+    margin-left: 300px;
+    top: 10px;
+    right: 20px;
+}
+
+.glyphicon:hover {
+    color:#AAAAAA;
+}
+
+/* stop the control buttons from being selectable*/
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+     -khtml-user-select: none; /* Konqueror */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+#instructionModal {
+    overflow: scroll;
+}
+
+#instructionModal div.modal-dialog {
+    width: 80%;
+}
+
+#instructionModal .modal-body {
+    margin: 0 2rem;
+}
+
+.row {
+    padding-top:4px;
+    padding-bottom: 4px;
+}
+
+.modal-content {
+    min-width: 760px;
+}
+
+.video-list {
+    padding: 0 50px 25px 50px;
+}
+
+.video-list h3 {
+    font-weight: 300;
+    font-size: 18px;
+}
+
+.wrap {
+    text-align: left;
+    padding: 0 50px 25px 50px;
+}
+
+#dropzone{
+    height: 80px;
+    line-height: 50px;
+    margin-top: 1%;
+    margin-left: 50px;
+    margin-right: 50px;
+    text-align: center;
+    font-weight: bold;
+
+}
+#message-div{
+    height: 50px;
+    margin-top: 1%;
+    margin-left: 50px;
+    margin-right: 50px;
+    text-align: center;
+    font-weight: bold;
+
+}
+

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<script type="text/javascript" src="/static/videolist.js"></script>
+<script type="text/javascript" src="/static/datasources.js"></script>
+<script type="text/javascript" src="/static/vendor/jquery/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/static/vendor/jquery/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="/static/vendor/jquery/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/static/fileupload.js"></script>
+<script src="{% static "table_vlist.js" %}"></script>
+<script defer src="{% static "two_buttons_modal.js" %}"></script>
+{% endblock %}
+
+{% block body %}
+
+<div class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#" style="padding: 5px 5px;">
+        <img src="/static/img/icon.png">
+      </a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="/">HOME <span class="sr-only">(current)</span></a></li>
+      <li><a href="/projects">Projects</a></li>
+      <li><a href="/labels">Labels</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h1>Videos</h1>
+      <div id="toolbar_vlist">
+        <div class="form-inline">
+          <button id="add-video-btn" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Video
+          </button>
+          <div class="btn-group">
+            <button id="export_vlist" class="btn btn-info dropdown-toggle" titel="Export" data-toggle="dropdown" disabled>
+                Export Label <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li id="yolo-btn"><a href="#">YOLO</a></li>
+              <li id="pascal-voc-btn"><a href="#">Pascal VOC</a></li>
+            </ul>
+          </div>
+          <button id="remove_video" class="btn btn-danger" disabled>
+              <i class="fas fa-times"></i> Delete
+          </button>
+          
+        </div>
+      </div>
+
+      <table id="vlist-table" class="table"
+          data-toolbar="#toolbar_vlist"
+          data-id-field="id"
+          data-pagination="true">
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="createVideoModal" tabindex="-1" role="dialog" aria-labelledby="createVideoModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="createVideoLabel">Add Video</h3>
+      </div>
+      <div class="modal-body">
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-sm-8 col col-sm-offset-2">
+                      <div class="form-group">
+                          <label for="project">Project</label>
+                          <select class="form-control" id="projectSelect">
+                          {% for ls in projects %}
+                              <option value="{{ls.id}}">{{ls.name}}</option>
+                          {% endfor %}
+                          </select>
+                          <span id="projectSelectError" class="help-block hidden"></span>
+                      </div>
+                      <div class="form-group">
+                          <label class="control-label"for="videoName">Video name</label>
+                          <input id="video_name" type="text" class="form-control" " name="name" required
+                            data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                          <span id="nameError" class="help-block hidden"></span>
+                      </div>
+                      <div class="form-group">
+                          <label for="addFilesBtn">Select a video recording or an image set</label>
+                          <div class="row">
+                              <div class="col-xs-4">
+                                  <span class="btn btn-primary fileinput-button">
+                                      <i class="fas fa-plus"></i>
+                                      <span>Add files...</span>
+                                      <input id="fileupload" type="file" class="form-control" name="file" multiple>
+                                  </span>
+                             </div>
+                             <div class="col-xs-8">
+                                 <span id="fileCount" class="help-block hidden">0 files selected</span>
+                             </div>
+                          </div>
+                          <span id="fileError" class="help-block hidden">Error</span>
+                      </div>
+                      <div class="row">
+                          <div id="fileUploadProgress" class="progress hidden">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button  id="closeVideoBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="uploadVideoBtn" type="button" class="btn btn-primary">Upload</button>
+       </div>
+    </div>
+  </div>
+</div>
+
+{% include "modals/two_buttons_modal.html" %}
+
+{% endblock %}
